@@ -1,0 +1,43 @@
+[user]
+	name = Tieme van Veen
+	email = tiemevanveen@hotmail.com
+
+[core]
+	mergeoptions = --no-edit
+	excludesfile = /Users/Tiemevanveen/.gitignore_global
+	editor = nano
+
+[apply]
+	whitespace = nowarn
+
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+
+[merge]
+	tool = opendiff
+
+[push]
+	default = current
+
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	grep = auto
+	interactive = auto
+	showbranch = auto
+	ui = true
+	pager = true
+
+[alias]
+	st = status 
+	br = branch -a -vv
+	co = checkout
+	addp = add --patch
+	ci = commit -m
+
+	filehist = log --graph --stat
+	lg2 = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' -n 30 --all
+	hist = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%n''' --all
+	histbr = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%n'''
