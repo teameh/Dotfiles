@@ -1,10 +1,10 @@
 [user]
 	name = Tieme van Veen
-	email = tiemevanveen@hotmail.com
+	email = user@example.com
 
 [core]
 	mergeoptions = --no-edit
-	excludesfile = /Users/Tiemevanveen/.gitignore_global
+	excludesfile = /Users/username/.gitignore_global
 	editor = nano
 
 [apply]

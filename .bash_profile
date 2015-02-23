@@ -1,132 +1,101 @@
-export PATH=$HOME/local/node/bin:$PATH
-export PATH=/usr/local/bin:$PATH
+source ~/.bash_prompt
+source ~/.git-completion.sh
+source ~/.git-prompt.sh
+source ~/.rvm/scripts/rvm
+
+
+# Case-insensitive globbing (used in pathname expansion)
+shopt -s nocaseglob;
+# Append to the Bash history file, rather than overwriting it
+shopt -s histappend;
+# Autocorrect typos in path names when using `cd`
+shopt -s cdspell;
+
+
+
+
+# path
+export PATH="$PATH:$HOME/local/node/bin";
+export PATH="$PATH:/usr/local/bin";
+export PATH="$PATH:$HOME/bin";
+export PATH="$PATH:$HOME/.rvm/bin"
+
+
+
+# Make sublime the default editor.
 export EDITOR='subl -w'
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+# Increase Bash history size. Allow 32³ entries; the default is 500.
+export HISTSIZE='10000';
+export HISTFILESIZE="${HISTSIZE}";
+
+# Omit duplicates and commands that begin with a space from history.
+export HISTCONTROL='ignoreboth';
+
+# Prefer US English and use UTF-8.
+export LANG='en_US.UTF-8';
+export LC_ALL='en_US.UTF-8';
+
+# Highlight section titles in manual pages.
+export LESS_TERMCAP_md="${yellow}";
+
+# Don’t clear the screen after quitting a manual page.
+export MANPAGER='less -X';
+
+# Always enable colored `grep` output.
+export GREP_OPTIONS='--color=auto';
+
+# Homebrew
+export HOMEBREW_GITHUB_API_TOKEN=cbbc75d189f2ced0a7a26c47fd04822bb0ba7218
+
+
+
+## Custom Aliasses!
+
+alias restart-memcached='launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.memcached.plist; launchctl load ~/Library/LaunchAgents/homebrew.mxcl.memcached.plist'
+
+## XCODE
+alias purgexcodebuilds='rm -rf ~/library/Developer/Xcode/DerivedData/*'
+
+## Other's Aliasses!
 
 alias ls="pwd; ls -al"
 
-# enable the git bash completion and promt commands
-source ~/.git-completion.sh
-source ~/.git-prompt.sh
-source ~/.profile
+# Get week number
+alias week='date +%V'
 
-# enable git unstaged indicators - set to a non-empty value
-GIT_PS1_SHOWDIRTYSTATE="1"
+# Get OS X Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
+alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update'
 
-# enable showing of untracked files - set to a non-empty value
-GIT_PS1_SHOWUNTRACKEDFILES="1"
+# IP addresses
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="ipconfig getifaddr en0"
+alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
 
-# enable stash checking - set to a non-empty value
-GIT_PS1_SHOWSTASHSTATE="1"
+# Flush Directory Service cache
+alias flush="dscacheutil -flushcache && killall -HUP mDNSResponder"
 
-# enable showing of HEAD vs its upstream
-GIT_PS1_SHOWUPSTREAM="auto"
+# Clean up LaunchServices to remove duplicates in the “Open With” menu
+alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
 
+# View HTTP traffic
+alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
+alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 
-# return the prompt prefix for the second line
-#  Customize BASH PS1 prompt to show current GIT repository and branch.
-#  by Mike Stewart - http://MediaDoneRight.com
+# Empty the Trash on all mounted volumes and the main HDD
+# Also, clear Apple’s System Logs to improve shell startup speed
+alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl"
 
-#  SETUP CONSTANTS
-#  Bunch-o-predefined colors.  Makes reading code easier than escape sequences.
-#  I don't remember where I found this.  o_O
+# Intuitive map function
+# For example, to list all directories that contain a certain file:
+# find . -name .gitattributes | map dirname
+alias map="xargs -n1"
 
-# Reset
-Color_Off="\[\033[0m\]"       # Text Reset
+# Make Grunt print stack traces by default
+command -v grunt > /dev/null && alias grunt="grunt --stack"
 
-# Regular Colors
-Black="\[\033[0;30m\]"        # Black
-Red="\[\033[0;31m\]"          # Red
-Green="\[\033[0;32m\]"        # Green
-Yellow="\[\033[0;33m\]"       # Yellow
-Blue="\[\033[0;34m\]"         # Blue
-Purple="\[\033[0;35m\]"       # Purple
-Cyan="\[\033[0;36m\]"         # Cyan
-White="\[\033[0;37m\]"        # White
+# Lock the screen (when going AFK)
+alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 
-# Bold
-BBlack="\[\033[1;30m\]"       # Black
-BRed="\[\033[1;31m\]"         # Red
-BGreen="\[\033[1;32m\]"       # Green
-BYellow="\[\033[1;33m\]"      # Yellow
-BBlue="\[\033[1;34m\]"        # Blue
-BPurple="\[\033[1;35m\]"      # Purple
-BCyan="\[\033[1;36m\]"        # Cyan
-BWhite="\[\033[1;37m\]"       # White
-
-# Underline
-UBlack="\[\033[4;30m\]"       # Black
-URed="\[\033[4;31m\]"         # Red
-UGreen="\[\033[4;32m\]"       # Green
-UYellow="\[\033[4;33m\]"      # Yellow
-UBlue="\[\033[4;34m\]"        # Blue
-UPurple="\[\033[4;35m\]"      # Purple
-UCyan="\[\033[4;36m\]"        # Cyan
-UWhite="\[\033[4;37m\]"       # White
-
-# Background
-On_Black="\[\033[40m\]"       # Black
-On_Red="\[\033[41m\]"         # Red
-On_Green="\[\033[42m\]"       # Green
-On_Yellow="\[\033[43m\]"      # Yellow
-On_Blue="\[\033[44m\]"        # Blue
-On_Purple="\[\033[45m\]"      # Purple
-On_Cyan="\[\033[46m\]"        # Cyan
-On_White="\[\033[47m\]"       # White
-
-# High Intensty
-IBlack="\[\033[0;90m\]"       # Black
-IRed="\[\033[0;91m\]"         # Red
-IGreen="\[\033[0;92m\]"       # Green
-IYellow="\[\033[0;93m\]"      # Yellow
-IBlue="\[\033[0;94m\]"        # Blue
-IPurple="\[\033[0;95m\]"      # Purple
-ICyan="\[\033[0;96m\]"        # Cyan
-IWhite="\[\033[0;97m\]"       # White
-
-# Bold High Intensty
-BIBlack="\[\033[1;90m\]"      # Black
-BIRed="\[\033[1;91m\]"        # Red
-BIGreen="\[\033[1;92m\]"      # Green
-BIYellow="\[\033[1;93m\]"     # Yellow
-BIBlue="\[\033[1;94m\]"       # Blue
-BIPurple="\[\033[1;95m\]"     # Purple
-BICyan="\[\033[1;96m\]"       # Cyan
-BIWhite="\[\033[1;97m\]"      # White
-
-# High Intensty backgrounds
-On_IBlack="\[\033[0;100m\]"   # Black
-On_IRed="\[\033[0;101m\]"     # Red
-On_IGreen="\[\033[0;102m\]"   # Green
-On_IYellow="\[\033[0;103m\]"  # Yellow
-On_IBlue="\[\033[0;104m\]"    # Blue
-On_IPurple="\[\033[10;95m\]"  # Purple
-On_ICyan="\[\033[0;106m\]"    # Cyan
-On_IWhite="\[\033[0;107m\]"   # White
-
-# Various variables you might want for your PS1 prompt instead
-Time12h="\T"
-Time12a="\@"
-PathShort="\w"
-PathFull="\W"
-NewLine="\n"
-Jobs="\j"
-
-# This PS1 snippet was adopted from code for MAC/BSD I saw from: http://allancraig.net/index.php?option=com_content&view=article&id=108:ps1-export-command-for-git&catid=45:general&Itemid=96
-# I tweaked it to work on UBUNTU 11.04 & 11.10 plus made it mo' better
-
-export PS1=$IBlack$Time12h$Color_Off'$(git branch &>/dev/null;\
-if [ $? -eq 0 ]; then \
-  echo "$(echo `git status` | grep "nothing to commit" > /dev/null 2>&1; \
-  if [ "$?" -eq "0" ]; then \
-    # @4 - Clean repository - nothing to commit
-    echo "'$Green'"$(__git_ps1 " (%s)"); \
-  else \
-    # @5 - Changes to working tree
-    echo "'$IRed'"$(__git_ps1 " {%s}"); \
-  fi) '$BYellow$PathShort$Color_Off' \$ "; \
-else \
-  # @2 - Prompt when not in GIT repo
-  echo " '$Yellow$PathShort$Color_Off' \$ "; \
-fi)'
+# Reload the shell (i.e. invoke as a login shell)
+alias reload="exec $SHELL -l"
