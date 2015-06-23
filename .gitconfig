@@ -5,7 +5,8 @@
 [core]
 	mergeoptions = --no-edit
 	excludesfile = /Users/username/.gitignore_global
-	editor = nano
+	editor = subl -n -w
+	trustctime = false
 
 [apply]
 	whitespace = nowarn
@@ -19,6 +20,9 @@
 
 [push]
 	default = current
+
+[diff]
+	tool = opendiff
 
 [color]
 	diff = auto
@@ -40,4 +44,8 @@
 	filehist = log --graph --stat
 	lg2 = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' -n 30 --all
 	hist = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%n''' --all
+	hist2 = log --all --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%ai%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
 	histbr = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%n'''
+	permission-reset = !git diff -p -R | grep -E \"^(diff|(old|new) mode)\" | git apply
+[rerere]
+	enabled = true
