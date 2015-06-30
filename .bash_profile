@@ -1,7 +1,6 @@
-source ~/.bash_prompt
-source ~/.git-completion.sh
-source ~/.git-prompt.sh
-source ~/.rvm/scripts/rvm
+source ~/Settings/.bash_prompt
+source ~/Settings/.git-completion.sh
+source ~/Settings/.git-prompt.sh
 
 
 # Case-insensitive globbing (used in pathname expansion)
@@ -11,16 +10,13 @@ shopt -s histappend;
 # Autocorrect typos in path names when using `cd`
 shopt -s cdspell;
 
-
-
-
 # path
 export PATH="$PATH:$HOME/local/node/bin";
 export PATH="$PATH:/usr/local/bin";
 export PATH="$PATH:$HOME/bin";
-export PATH="$PATH:$HOME/.rvm/bin"
 
-
+# histfile
+export HISTFILE=~/Settings/.bash_history
 
 # Make sublime the default editor.
 export EDITOR='subl -w'
@@ -84,7 +80,7 @@ alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET
 
 # Empty the Trash on all mounted volumes and the main HDD
 # Also, clear Apple’s System Logs to improve shell startup speed
-alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl"
+alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/Projects/Repos/Trash; sudo rm -rfv /private/var/log/asl/*.asl"
 
 # Intuitive map function
 # For example, to list all directories that contain a certain file:
