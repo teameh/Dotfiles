@@ -1,12 +1,13 @@
 [user]
 	name = Tieme van Veen
 	email = user@example.com
+	signingkey = YOUR_GPG_KEY_HERE
 
 [core]
 	mergeoptions = --no-edit
 	excludesfile = /Users/username/.gitignore_global
-	editor = subl -n -w
 	trustctime = false
+	autocrlf = input
 
 [apply]
 	whitespace = nowarn
@@ -34,21 +35,56 @@
 	ui = true
 	pager = true
 
+[rerere]
+	enabled = false
+
+[commit]
+	gpgsign = true
+
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+
 [alias]
 	st = status 
 	br = branch -a -vv
 	co = checkout
+	cop = checkout --patch
+	resetp = reset --patch
 	addp = add --patch
 	ci = commit -m
 	amend = commit --amend
 	pick = cherry-pick
 	graph = log --graph --all
+	f = fetch --prune
+	stashlist = stash list --date=short
+	stashlist-full = stash-list
 
 	filehist = log --graph --stat
-	lg2 = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' -n 30 --all
-	hist = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%n''' --all
-	hist2 = log --all --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%ai%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
-	histbr = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%n'''
+	hist   = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%ad%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%n''' --all --date=local
+	histoneline   = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%ad%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all --date=local
+	histbr = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%ad%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%n''' --date=local
+
+	# reset permissions 
 	permission-reset = !git diff -p -R | grep -E \"^(diff|(old|new) mode)\" | git apply
-[rerere]
-	enabled = true
+
+	# reset pending changes 
+	goddammit = reset @ --hard
+
+	# Get the current branch name (not so useful in itself, but used in other aliases)
+	branch-name = "!git rev-parse --abbrev-ref HEAD"
+
+	# Push the current branch to the remote "origin", and set it to track the upstream branch
+	publish = "!git push -u origin $(git branch-name)"
+
+	# Delete the remote version of the current branch
+	unpublish = "!git push origin :$(git branch-name)"
+
+	# Show changes that have been staged
+	diffc = diff --cached
+
+	# shows branches containing commit 
+	contains = branch --contains
+
+	# shows in which commit file is deleted
+	when-deleted = log -1 --all -- 

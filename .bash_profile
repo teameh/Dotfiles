@@ -2,7 +2,6 @@ source ~/Settings/.bash_prompt
 source ~/Settings/.git-completion.sh
 source ~/Settings/.git-prompt.sh
 
-
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob;
 # Append to the Bash history file, rather than overwriting it
@@ -13,7 +12,9 @@ shopt -s cdspell;
 # path
 export PATH="$PATH:$HOME/local/node/bin";
 export PATH="$PATH:/usr/local/bin";
+export PATH="$PATH:/usr/local/sbin";
 export PATH="$PATH:$HOME/bin";
+export PATH="$PATH:$HOME/Settings";
 
 # histfile
 export HISTFILE=~/Settings/.bash_history
@@ -22,7 +23,7 @@ export HISTFILE=~/Settings/.bash_history
 export EDITOR='subl -w'
 
 # Increase Bash history size. Allow 32³ entries; the default is 500.
-export HISTSIZE='10000';
+export HISTSIZE='1000';
 export HISTFILESIZE="${HISTSIZE}";
 
 # Omit duplicates and commands that begin with a space from history.
@@ -41,20 +42,23 @@ export MANPAGER='less -X';
 # Always enable colored `grep` output.
 export GREP_OPTIONS='--color=auto';
 
-# Homebrew
-export HOMEBREW_GITHUB_API_TOKEN=cbbc75d189f2ced0a7a26c47fd04822bb0ba7218
-
-
+# Homebrew -> fill in your token
+export HOMEBREW_GITHUB_API_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 ## Custom Aliasses!
+alias restart-memcached="launchctl unload $HOME/Library/LaunchAgents/homebrew.mxcl.memcached.plist; launchctl load $HOME/Library/LaunchAgents/homebrew.mxcl.memcached.plist"
+alias restart-apache='sudo apachectl restart'
 
-alias restart-memcached='launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.memcached.plist; launchctl load ~/Library/LaunchAgents/homebrew.mxcl.memcached.plist'
+# Delete all 'gone' 'merged' branches
+alias git-cleanup-branches="git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d"
 
-## XCODE
+## Cleanup XCODE
 alias purgexcodebuilds='rm -rf ~/library/Developer/Xcode/DerivedData/*'
 
-## Other's Aliasses!
+## OSX
+alias delete-extended-attributes='xattr -c'
 
+## Other's Aliasses!
 alias ls="pwd; ls -al"
 
 # Get week number
@@ -91,7 +95,10 @@ alias map="xargs -n1"
 command -v grunt > /dev/null && alias grunt="grunt --stack"
 
 # Lock the screen (when going AFK)
-alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
+alias afk="date \"+Locked screen on: %H:%M\"; /System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
+
+# Edit these settings
+alias Settings="subl ~/Settings/"
 
 # Reload the shell (i.e. invoke as a login shell)
 alias reload="exec $SHELL -l"
