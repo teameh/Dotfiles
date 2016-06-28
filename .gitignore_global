@@ -68,3 +68,11 @@ com_crashlytics_export_strings.xml
 
 # composer projects 
 composer.lock
+
+####### ECLIPSE #########
+.buildpath
+.project
+.settings/
+
+####### PHP-CS-Fixer #########
+cs_fixer_tmp_*
