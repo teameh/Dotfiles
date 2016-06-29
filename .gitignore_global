@@ -19,6 +19,9 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+####### Zsh #######
+.zshrc_history
+
 ####### Xcode #######
 build/
 *.pbxuser
