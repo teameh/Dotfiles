@@ -90,3 +90,6 @@
 
 	# shows in which commit file is deleted
 	when-deleted = log -1 --all -- 
+	
+	# show ignored items
+	ignored = status --ignored
