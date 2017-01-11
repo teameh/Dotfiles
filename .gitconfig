@@ -19,6 +19,9 @@
 [merge]
 	tool = opendiff
 
+[rebase]
+	instructionFormat = [%aN] %s (%ai)
+
 [push]
 	default = current
 
@@ -53,7 +56,7 @@
 	resetp = reset --patch
 	addp = add --patch
 	ci = commit -m
-	amend = commit --amend
+	amend = commit --amend --no-edit
 	pick = cherry-pick
 	graph = log --graph --all
 	f = fetch --prune
@@ -89,7 +92,11 @@
 	contains = branch --contains
 
 	# shows in which commit file is deleted
-	when-deleted = log -1 --all -- 
-	
+	when-deleted = log -1 --all --
+
 	# show ignored items
 	ignored = status --ignored
+
+	# https://coderwall.com/p/ok-iyg/git-prev-next
+	prev = checkout HEAD^1
+	next = "!sh -c 'git log --reverse --pretty=%H master | awk \"/$(git rev-parse HEAD)/{getline;print}\" | xargs git checkout'"
