@@ -19,6 +19,9 @@
 [merge]
 	tool = opendiff
 
+[mergetool]
+	keepBackup = false
+
 [rebase]
 	instructionFormat = [%aN] %s (%ai)
 
@@ -49,7 +52,7 @@
 	trustExitCode = true
 
 [alias]
-	st = status 
+	st = status -sb
 	br = branch -a -vv
 	co = checkout
 	cop = checkout --patch
@@ -74,10 +77,10 @@
 	histoneline   = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%ad%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all --date=local
 	histbr = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%ad%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%n''' --date=local
 
-	# reset permissions 
+	# reset permissions
 	permission-reset = !git diff -p -R | grep -E \"^(diff|(old|new) mode)\" | git apply
 
-	# reset pending changes 
+	# reset pending changes
 	goddammit = reset @ --hard
 
 	# Get the current branch name (not so useful in itself, but used in other aliases)
@@ -92,11 +95,13 @@
 	# Show changes that have been staged
 	diffc = diff --cached
 
-	# shows branches containing commit 
+	# shows branches containing commit
 	contains = branch --contains
 
-	# shows in which commit file is deleted
+	# manage deletions
+	show-deletions = log --diff-filter=D --summary
 	when-deleted = log -1 --all --
+	restore-file = !git checkout $(git rev-list -n 1 HEAD -- "$1")^ -- "$1"
 
 	# show ignored items
 	ignored = status --ignored

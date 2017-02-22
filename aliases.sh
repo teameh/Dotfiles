@@ -56,3 +56,7 @@ alias afk="date \"+Locked screen on: %H:%M\"; /System/Library/CoreServices/Menu\
 
 # Reload the shell (i.e. invoke as a login shell)
 alias reload="exec $SHELL -l"
+
+# typos
+alias gut=git
+
