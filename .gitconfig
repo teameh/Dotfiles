@@ -52,10 +52,14 @@
 	trustExitCode = true
 
 [alias]
+	a = add
+	aa = add .
 	st = status -sb
 	br = branch -a -vv
 	co = checkout
+	cob = checkout -b
 	cop = checkout --patch
+	d = diff
 	resetp = reset --patch
 	addp = add --patch
 	ci = commit -m
@@ -66,10 +70,12 @@
 	
 	stashlist = stash list --date=short
 	stashlist-full = stash-list
+	stashed = stash list --date=short
 	sa = "!sh -c 'git stash apply stash@{$1}' -"
 	sd = "!sh -c 'git stash drop stash@{$1}' -"
 	stashall = stash --include-untracked
-	
+	squash = "!f() { git rebase -i HEAD~$1; }; f"
+
 	filehist = log --graph --stat
 	hist   = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%ad%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%n''' --all --date=local
 	histoneline   = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%ad%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all --date=local
@@ -101,9 +107,17 @@
 	when-deleted = log -1 --all --
 	restore-file = !git checkout $(git rev-list -n 1 HEAD -- "$1")^ -- "$1"
 
+	# Push the current branch to the remote "origin", and set it to track the upstream branch
+	pub = "!git push -u origin $(git branch-name)"
+
 	# show ignored items
 	ignored = status --ignored
 
 	# https://coderwall.com/p/ok-iyg/git-prev-next
 	prev = checkout HEAD^1
 	next = "!sh -c 'git log --reverse --pretty=%H master | awk \"/$(git rev-parse HEAD)/{getline;print}\" | xargs git checkout'"
+	
+	master = checkout master
+	development = checkout development
+	dev = checkout development
+
