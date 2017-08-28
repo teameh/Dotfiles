@@ -116,3 +116,8 @@
 	# https://coderwall.com/p/ok-iyg/git-prev-next
 	prev = checkout HEAD^1
 	next = "!sh -c 'git log --reverse --pretty=%H master | awk \"/$(git rev-parse HEAD)/{getline;print}\" | xargs git checkout'"
+	
+	master = checkout master
+	development = checkout development
+	dev = checkout development
+
