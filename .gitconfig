@@ -8,6 +8,7 @@
 	excludesfile = /Users/username/.gitignore_global
 	trustctime = false
 	autocrlf = input
+	pager = less -XRF
 
 [apply]
 	whitespace = nowarn
@@ -88,9 +89,6 @@
 
 	# reset permissions
 	permission-reset = !git diff -p -R | grep -E \"^(diff|(old|new) mode)\" | git apply
-
-	# reset pending changes
-	goddammit = reset @ --hard
 
 	# Get the current branch name (not so useful in itself, but used in other aliases)
 	branch-name = "!git rev-parse --abbrev-ref HEAD"

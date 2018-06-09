@@ -10,7 +10,8 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 # user settings
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/.rvm/bin:$HOME/.yarn/bin"
+
 export USER_NAME="Tieme van Veen"
 export SSH_KEY_PATH=$HOME/.ssh/dsa_id
 
@@ -44,3 +45,5 @@ fi
 
 source $HOME/Dotfiles/aliases.sh
 source $HOME/Dotfiles/.iterm2_shell_integration.zsh
+
+DEFAULT_USER="Tieme"
