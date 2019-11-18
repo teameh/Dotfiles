@@ -47,3 +47,47 @@ source $HOME/Dotfiles/aliases.sh
 source $HOME/Dotfiles/.iterm2_shell_integration.zsh
 
 DEFAULT_USER="Tieme"
+
+# Fixing typos
+eval $(thefuck --alias)
+
+###### More git goodies functions
+
+# Interactive git log
+hist() {
+  git log --graph --abbrev-commit --decorate --all --date=local --color=always \
+    --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%ad%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%n''' "$@" \
+    | fzf --ansi --no-sort --reverse --tiebreak=index --preview "echo {} \
+        | grep -o '[a-f0-9]\{7\}' \
+        | head -1 \
+        | xargs -I % sh -c 'git show --stat --color=always %; git show --color=always %'" \
+            --bind "ctrl-y:execute-silent(echo {} | grep -o '[a-f0-9]\{7\}' | head -1 | pbcopy)+abort" \
+            --bind "enter:execute:
+                  (grep -o '[a-f0-9]\{7\}' | head -1 | xargs -I % sh -c 'git show --color=always % | less -R') \
+                  < <(printf '\n%s\n' {})" \
+}
+
+# fco - checkout git branch/tag, with a preview showing the commits between the tag/branch and HEAD
+fco() {
+  local tags branches target
+  branches=$(
+    git --no-pager branch --all \
+      --format="%(if)%(HEAD)%(then)%(else)%(if:equals=HEAD)%(refname:strip=3)%(then)%(else)%1B[0;34;1mbranch%09%1B[m%(refname:short)%(end)%(end)" \
+    | sed '/^$/d') || return
+  tags=$(
+    git --no-pager tag | awk '{print "\x1b[35;1mtag\x1b[m\t" $1}') || return
+  target=$(
+    (echo "$branches"; echo "$tags") |
+    fzf --height=60% --no-hscroll --no-multi -n 2 \
+        --ansi --preview="git log '..{2}' --color=always --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%ad%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%n''' --date=local") || return
+  git checkout $(awk '{print $2}' <<<"$target" )
+}
+
+# fco2 - checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
+fco2() {
+  local branches branch
+  branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
+  branch=$(echo "$branches" |
+           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+}
