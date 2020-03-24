@@ -120,14 +120,13 @@
 	prev = checkout HEAD^1
 	next = "!sh -c 'git log --reverse --pretty=%H master | awk \"/$(git rev-parse HEAD)/{getline;print}\" | xargs git checkout'"
 
-	master = checkout master
-	development = checkout development
-	dev = checkout development
-	develop = checkout develop
-	sdiff = "!bash -c 'O=(); A=(); while x=\"$1\"; shift; do case $x in -*) O+=(\"$x\");; *) A+=(\"$x^{}\");; esac; done; g(){ git show \"${A[$1]}\" && return; echo FAIL ${A[$1]}; git show \"${A[$2]}\"; }; diff \"${O[@]}\" <(g 0 1) <(g 1 0)' --"
-
 	workadd = "!f(){ git worktree add ../$(basename $(pwd))-\"$1\" \"$1\"; echo $(pwd)/../$(basename $(pwd))-\"$1\"; }; f"
 	workdel = "!f(){ git worktree remove ../$(basename $(pwd))-\"$1\"; }; f"
+	workdelf = "!f(){ git worktree remove ../$(basename $(pwd))-\"$1\" --force; }; f"
+	cow = "!f(){ cd ../$(basename $(pwd))-\"$1\"; }; f"
+	cmd = commands
+	pushf = push --force-with-lease
+	reset-origin = !git fetch && git reset origin/`git rev-parse --abbrev-ref HEAD` --hard
 
 	# git branch :) 
 	git = !exec git
