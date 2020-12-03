@@ -39,7 +39,6 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-Pods
 
 ####### SUBLIME #########
 *.sublime-workspace

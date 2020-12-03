@@ -24,8 +24,10 @@ unsetopt inc_append_history
 unsetopt share_history
 
 # Prefer US English and use UTF-8.
-export LANG="en_US.UTF-8";
-export LC_ALL="en_US.UTF-8";
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
+
 
 # Highlight section titles in manual pages.
 export LESS_TERMCAP_md="${yellow}";
@@ -48,6 +50,8 @@ source $HOME/Dotfiles/.iterm2_shell_integration.zsh
 
 DEFAULT_USER="Tieme"
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
 # Fixing typos
 eval $(thefuck --alias)
 
@@ -67,7 +71,20 @@ hist() {
                   < <(printf '\n%s\n' {})" \
 }
 
-# fco - checkout git branch/tag, with a preview showing the commits between the tag/branch and HEAD
+histbr() {
+  git log --graph --abbrev-commit --decorate --date=local --color=always \
+    --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%ad%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%n''' "$@" \
+    | fzf --ansi --no-sort --reverse --tiebreak=index --preview "echo {} \
+        | grep -o '[a-f0-9]\{7\}' \
+        | head -1 \
+        | xargs -I % sh -c 'git show --stat --color=always %; git show --color=always %'" \
+            --bind "ctrl-y:execute-silent(echo {} | grep -o '[a-f0-9]\{7\}' | head -1 | pbcopy)+abort" \
+            --bind "enter:execute:
+                  (grep -o '[a-f0-9]\{7\}' | head -1 | xargs -I % sh -c 'git show --color=always % | less -R') \
+                  < <(printf '\n%s\n' {})" \
+}
+
+# fco_preview - checkout git branch/tag, with a preview showing the commits between the tag/branch and HEAD
 fco() {
   local tags branches target
   branches=$(
@@ -83,8 +100,8 @@ fco() {
   git checkout $(awk '{print $2}' <<<"$target" )
 }
 
-# fco2 - checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
-fco2() {
+# fbr - checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
+fbr() {
   local branches branch
   branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
   branch=$(echo "$branches" |

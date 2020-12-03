@@ -10,6 +10,15 @@
 	autocrlf = input
 	pager = less -XRF
 
+[credential]
+	helper = osxkeychain
+
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = false
+
 [apply]
 	whitespace = nowarn
 
@@ -127,6 +136,3 @@
 	cmd = commands
 	pushf = push --force-with-lease
 	reset-origin = !git fetch && git reset origin/`git rev-parse --abbrev-ref HEAD` --hard
-
-	# git branch :) 
-	git = !exec git

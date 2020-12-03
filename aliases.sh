@@ -3,9 +3,9 @@ alias zshconfig="subl ~/.zshrc"
 
 alias server="php -S 127.0.0.1:4000"
 
-alias Apps='cd ~/Projects/Apps'
-alias Web='cd ~/Projects/Web'
-alias Repos='cd ~/Projects/Repos'
+alias Apps='cd ~/Developer/Apps'
+alias Web='cd ~/Developer/Web'
+alias Repos='cd ~/Developer/Repos'
 
 # Edit Dotfiles
 alias Dotfiles="subl ~/Dotfiles/"
@@ -60,3 +60,12 @@ alias reload="exec $SHELL -l"
 # typos
 alias gut=git
 
+alias deleteDsStore="find . -name '.DS_Store' -type f -delete"
+
+alias rsyncopy="rsync -vraz --exclude '.Trashes' --exclude '.Spotlight-V100' --exclude '.fseventsd'"
+alias listbackup-disks="diskutil cs list"
+alias listbackup-info="diskutil cs info /Volumes/"
+
+alias record-sim="xcrun simctl io booted recordVideo -f --mask=black --codec=h264 ~/Desktop/ios-sim-video.mov"
+
+alias edit-keybindings="subl ~/Library/KeyBindings/DefaultKeyBinding.dict"
