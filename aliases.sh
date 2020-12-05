@@ -6,9 +6,10 @@ alias server="php -S 127.0.0.1:4000"
 alias Apps='cd ~/Developer/Apps'
 alias Web='cd ~/Developer/Web'
 alias Repos='cd ~/Developer/Repos'
+alias Study='cd ~/Developer/Study'
 
 # Edit Dotfiles
-alias Dotfiles="subl ~/Dotfiles/"
+alias Dotfiles="subl ~/Developer/Repos/Dotfiles/"
 
 # Delete all 'gone' 'merged' branches
 alias git-cleanup-branches="git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d"
@@ -63,6 +64,7 @@ alias gut=git
 alias deleteDsStore="find . -name '.DS_Store' -type f -delete"
 
 alias rsyncopy="rsync -vraz --exclude '.Trashes' --exclude '.Spotlight-V100' --exclude '.fseventsd'"
+alias rsyncssh="rsync -P -vraz  --exclude '.Trashes' --exclude '.Spotlight-V100' --exclude '.fseventsd' --rsh=ssh"
 alias listbackup-disks="diskutil cs list"
 alias listbackup-info="diskutil cs info /Volumes/"
 

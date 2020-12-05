@@ -62,9 +62,8 @@
 [commit]
 	gpgsign = true
 
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+[gpg]
+	program = gpg
 
 [alias]
 	a = add
@@ -82,10 +81,9 @@
 	pick = cherry-pick
 	graph = log --graph --all
 	f = fetch --prune
-	
+
 	stashlist = stash list --date=short
-	stashlist-full = stash-list
-	stashed = stash list --date=short
+	stashlist-full = "!sh ~/Developer/Repos/Dotfiles/git-stash-list"
 	sa = "!sh -c 'git stash apply stash@{$1}' -"
 	sd = "!sh -c 'git stash drop stash@{$1}' -"
 	stashall = stash --include-untracked

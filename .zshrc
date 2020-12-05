@@ -1,25 +1,37 @@
-ZSH=$HOME/.oh-my-zsh/
+DOTFILES=$HOME/Developer/Repos/Dotfiles/
+TERMINAL_FILES=$HOME/Developer/Repos/Terminal/
 
 ZSH_THEME=agnoster
 CASE_SENSITIVE=true
 ENABLE_CORRECTION=false
 COMPLETION_WAITING_DOTS=true
-
 plugins=(git)
 
-source $ZSH/oh-my-zsh.sh
+# Setup oh my zsh
+source $TERMINAL_FILES/oh-my-zsh/oh-my-zsh.sh
 
-# user settings
-export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/.rvm/bin:$HOME/.yarn/bin"
+# iTerm integration
+source $TERMINAL_FILES/.iterm2_shell_integration.zsh
 
-export USER_NAME="Tieme van Veen"
+# Setup fzf
+export PATH="${PATH:+${PATH}:}${TERMINAL_FILES}/fzf/bin"
+source $TERMINAL_FILES/fzf/shell/completion.zsh 2> /dev/null
+source $TERMINAL_FILES/fzf/shell/key-bindings.zsh 2> /dev/null
+
+# Aliasses
+source $DOTFILES/aliases.sh
+
+
+# # export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/.rvm/bin:$HOME/.yarn/bin"
+
+export USER_NAME="Tieme"
 export SSH_KEY_PATH=$HOME/.ssh/dsa_id
-
 export APPEND_HISTORY=true
-export HISTFILE=$HOME/Dotfiles/.zshrc_history
+export HISTFILE=$DOTFILES/.zshrc_history
 export HISTSIZE=10000;
 export HISTFILESIZE=10000;
 export HISTCONTROL="ignoreboth"; # Omit duplicates and commands that begin with a space from history.
+DEFAULT_USER="Tieme"
 unsetopt inc_append_history
 unsetopt share_history
 
@@ -45,15 +57,9 @@ else
   export EDITOR="subl -w"
 fi
 
-source $HOME/Dotfiles/aliases.sh
-source $HOME/Dotfiles/.iterm2_shell_integration.zsh
-
-DEFAULT_USER="Tieme"
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Fixing typos
-eval $(thefuck --alias)
+# eval $(thefuck --alias)
 
 ###### More git goodies functions
 
@@ -108,3 +114,4 @@ fbr() {
            fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
   git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
 }
+
