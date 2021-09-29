@@ -15,7 +15,7 @@ alias Dotfiles="subl ~/Developer/Repos/Dotfiles/"
 alias git-cleanup-branches="git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d"
 
 ## Cleanup XCODE
-alias purgexcodebuilds='rm -rf ~/library/Developer/Xcode/DerivedData/*'
+alias purgexcodebuilds='rm -rf ~/library/Developer/Xcode/DerivedData'
 
 ## OSX
 alias delete-extended-attributes='xattr -c'
@@ -71,3 +71,107 @@ alias listbackup-info="diskutil cs info /Volumes/"
 alias record-sim="xcrun simctl io booted recordVideo -f --mask=black --codec=h264 ~/Desktop/ios-sim-video.mov"
 
 alias edit-keybindings="subl ~/Library/KeyBindings/DefaultKeyBinding.dict"
+
+
+
+# Fixing typos
+# eval $(thefuck --alias)
+
+###### More git goodies functions
+
+# Interactive git log
+hist() {
+  git log --graph --abbrev-commit --decorate --all --date=local --color=always \
+    --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%ad%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%n''' "$@" \
+    | fzf --ansi --no-sort --reverse --tiebreak=index --preview "echo {} \
+        | grep -o '[a-f0-9]\{7\}' \
+        | head -1 \
+        | xargs -I % sh -c 'git show --stat --color=always %; git show --color=always %'" \
+            --bind "ctrl-y:execute-silent(echo {} | grep -o '[a-f0-9]\{7\}' | head -1 | pbcopy)+abort" \
+            --bind "enter:execute:
+                  (grep -o '[a-f0-9]\{7\}' | head -1 | xargs -I % sh -c 'git show --color=always % | less -R') \
+                  < <(printf '\n%s\n' {})" \
+}
+
+histbr() {
+  git log --graph --abbrev-commit --decorate --date=local --color=always \
+    --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%ad%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%n''' "$@" \
+    | fzf --ansi --no-sort --reverse --tiebreak=index --preview "echo {} \
+        | grep -o '[a-f0-9]\{7\}' \
+        | head -1 \
+        | xargs -I % sh -c 'git show --stat --color=always %; git show --color=always %'" \
+            --bind "ctrl-y:execute-silent(echo {} | grep -o '[a-f0-9]\{7\}' | head -1 | pbcopy)+abort" \
+            --bind "enter:execute:
+                  (grep -o '[a-f0-9]\{7\}' | head -1 | xargs -I % sh -c 'git show --color=always % | less -R') \
+                  < <(printf '\n%s\n' {})" \
+}
+
+# fco_preview - checkout git branch/tag, with a preview showing the commits between the tag/branch and HEAD
+fco() {
+  local tags branches target
+  branches=$(
+    git --no-pager branch --all \
+      --format="%(if)%(HEAD)%(then)%(else)%(if:equals=HEAD)%(refname:strip=3)%(then)%(else)%1B[0;34;1mbranch%09%1B[m%(refname:short)%(end)%(end)" \
+    | sed '/^$/d') || return
+  tags=$(
+    git --no-pager tag | awk '{print "\x1b[35;1mtag\x1b[m\t" $1}') || return
+  target=$(
+    (echo "$branches"; echo "$tags") |
+    fzf --height=60% --no-hscroll --no-multi -n 2 \
+        --ansi --preview="git log '..{2}' --color=always --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%ad%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%n''' --date=local") || return
+  git checkout $(awk '{print $2}' <<< "$target" )
+}
+
+# fbr - checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
+fbr() {
+  local branches branch
+  branches=$(git for-each-ref --count=100 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
+  branch=$(echo "$branches" | fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+}
+
+# # Add git working directory
+# workadd() {
+#   local branches branch root worktreesFolder
+#   root=$(git worktree list | head -1 | awk '{print $1}') &&
+#   worktrees=$(basename $(git worktree list | head -1 | awk '{print $1}'))-worktrees &&
+#   branches=$(git for-each-ref --count=100 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
+#   branch=$(echo "$branches" | fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+#   newPath=$(echo "$root/../$worktrees/$branch") &&
+#   git worktree add $newPath $branch &&
+#   cd $newPath
+# }
+
+# Add git working directory
+workadd() {
+  local branches branch root worktreesFolder
+  root=$(git worktree list | head -1 | awk '{print $1}') &&
+  worktrees=$(basename $(git worktree list | head -1 | awk '{print $1}'))-worktrees &&
+  remote=$(git remote show) &&
+  allbranches=$(git branch -la --sort=-committerdate --format="%(refname:short)") &&
+  branches=$(echo "$allbranches" | sed "s/$remote\///g" | awk '! seen[$0]++') &&
+  branch=$(echo "$branches" | fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+  newPath=$(echo "$root/../$worktrees/$branch") &&
+  git worktree add $newPath $branch &&
+  cd $newPath
+}
+
+# Switch to other git working directory
+worktree() {
+  local branches branch root worktreesFolder
+  root=$(git worktree list | head -1 | awk '{print $1}') &&
+  worktrees=$(basename $(git worktree list | head -1 | awk '{print $1}'))-worktrees &&
+  branches=$(git worktree list) &&
+  selection=$(echo "$branches" | fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+  cd $(echo "$selection" | head -1 | awk '{print $1}');
+}
+
+# Delete git working directory
+workdel() {
+  local branches branch root worktreesFolder
+  root=$(git worktree list | head -1 | awk '{print $1}') &&
+  worktrees=$(basename $(git worktree list | head -1 | awk '{print $1}'))-worktrees &&
+  branches=$(git worktree list) &&
+  selection=$(echo "$branches" | fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+  git worktree remove $(echo "$selection" | head -1 | awk '{print $1}') $1;
+}

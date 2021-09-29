@@ -15,18 +15,24 @@ xcode-select --install
 
 mkdir -p $HOME/Developer/Repos/Terminal
 cd $HOME/Developer/Repos/Terminal
-git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git oh-my-zsh
-git clone --depth=1 https://github.com/junegunn/fzf.git fzf
+git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git $HOME/Developer/Repos/Terminal/oh-my-zsh
+git clone --depth=1 https://github.com/junegunn/fzf.git $HOME/Developer/Repos/Terminal/fzf
 
 # Symlinks
 ln -s $HOME/Developer/Repos/Dotfiles/.zshrc ~/.zshrc
 ln -s $HOME/Developer/Repos/Dotfiles/.gitconfig ~/.gitconfig
+ln -s $HOME/Developer/Repos/Dotfiles/.gitignore_global ~/.gitignore_global
 
 # Brew
-# /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-#  brew install node
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+brew install node fzf
+brew install --cask LICEcap spectacle
 
 sudo gem install cocoapods
+
+# Screenshots:
+open "https://apple.stackexchange.com/questions/365500/screenshot-to-clipboard-by-default"
 
 ###############################################################################
 # Rest is adopted from:                                                       #
@@ -79,6 +85,16 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 # Set a blazingly fast keyboard repeat rate
 defaults write NSGlobalDomain KeyRepeat -int 1
 defaults write NSGlobalDomain InitialKeyRepeat -int 10
+
+###############################################################################
+# Screen                                                                      #
+###############################################################################
+
+# Save screenshots to Desktop/Screenshots
+defaults write com.apple.screencapture location -string "${HOME}/Desktop/Screenshots"
+
+# Disable shadow in screenshots
+defaults write com.apple.screencapture disable-shadow -bool true
 
 ###############################################################################
 # Finder                                                                      #
