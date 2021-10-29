@@ -1,0 +1,61 @@
+#!/bin/bash
+
+printHelp() {
+    echo "git-tree v0.1
+
+Helpers for git worktree.
+
+Usage:
+    git tree
+    git tree switch
+    git tree add (-c | -C)
+    git tree remove (-d | -D)
+    "
+}
+
+checkfzf() {
+    if which fzf-tmux >/dev/null; then
+        break;
+    else
+        printHelp
+
+        echo "Error: fzf is not installed, run 'brew install fzf' to install it"
+        echo "See https://github.com/junegunn/fzf"
+
+        exit 1
+    fi
+}
+
+if [ -z "$1" ] || [ "$1" == "switch" ] || [ "$1" == "-s" ]; then
+    checkfzf
+    root=$(git worktree list | head -1 | awk '{print $1}') &&
+    worktrees=$(basename $(git worktree list | head -1 | awk '{print $1}'))-worktrees &&
+    branches=$(git worktree list) &&
+    selection=$(echo "$branches" | fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+    cd $(echo "$selection" | head -1 | awk '{print $1}');
+
+elif [ "$1" == "add" ] || [ "$1" == "-c" ] || [ "$1" == "-C" ]; then
+    checkfzf
+    root=$(git worktree list | head -1 | awk '{print $1}') &&
+    worktrees=$(basename $(git worktree list | head -1 | awk '{print $1}'))-worktrees &&
+    remote=$(git remote show) &&
+    allbranches=$(git branch -la --sort=-committerdate --format="%(refname:short)") &&
+    branches=$(echo "$allbranches" | sed "s/$remote\///g" | awk '! seen[$0]++') &&
+    branch=$(echo "$branches" | fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+    newPath=$(echo "$root/../$worktrees/$branch") &&
+    git worktree add $newPath $branch &&
+    cd $newPath
+
+elif [ "$1" == "remove" ] || [ "$1" == "-d" ] || [ "$1" == "-D" ]; then
+    checkfzf
+    root=$(git worktree list | head -1 | awk '{print $1}') &&
+    worktrees=$(basename $(git worktree list | head -1 | awk '{print $1}'))-worktrees &&
+    branches=$(git worktree list) &&
+    selection=$(echo "$branches" | fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+    git worktree remove $(echo "$selection" | head -1 | awk '{print $1}') $1;
+
+else
+    printHelp
+fi
+
+exit 0

@@ -70,6 +70,7 @@
 	aa = add .
 	st = status -sb
 	br = branch -a -vv
+	sw = switch
 	co = checkout
 	cob = checkout -b
 	cop = checkout --patch
@@ -84,6 +85,8 @@
 
 	stashlist = stash list --date=short
 	stashlist-full = "!sh ~/Developer/Repos/Dotfiles/git-stash-list"
+	tree = "!sh ~/Developer/Repos/Dotfiles/git-trees"
+
 	sa = "!sh -c 'git stash apply stash@{$1}' -"
 	sd = "!sh -c 'git stash drop stash@{$1}' -"
 	stashall = stash --include-untracked
@@ -126,10 +129,6 @@
 	# https://coderwall.com/p/ok-iyg/git-prev-next
 	prev = checkout HEAD^1
 	next = "!sh -c 'git log --reverse --pretty=%H master | awk \"/$(git rev-parse HEAD)/{getline;print}\" | xargs git checkout'"
-
-	workadd = "!f(){ git worktree add ../$(basename $(pwd))-\"$1\" \"$1\"; echo $(pwd)/../$(basename $(pwd))-\"$1\"; }; f"
-	workdel = "!f(){ git worktree remove ../$(basename $(pwd))-\"$1\"; }; f"
-	workdelf = "!f(){ git worktree remove ../$(basename $(pwd))-\"$1\" --force; }; f"
 	cow = "!f(){ cd ../$(basename $(pwd))-\"$1\"; }; f"
 	cmd = commands
 	pushf = push --force-with-lease
