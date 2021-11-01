@@ -14,6 +14,8 @@ usage: git-tree (switch)               Switches directory
 "
 }
 
+# TODO: find out how to add autocomplete for bash / zsh..
+
 git-tree() {
     if ! which fzf-tmux >/dev/null; then
         echo "Error: fzf is not installed, run 'brew install fzf' to install."
