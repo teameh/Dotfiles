@@ -18,9 +18,6 @@ git-tree() {
         echo "See https://github.com/junegunn/fzf\n"
         printHelp
         return 1
-    elif if [ "$1" = "help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
-        printHelp
-        return
     elif [ -z "$1" ] || [ "$1" = "switch" ] || [ "$1" = "-s" ]; then
         local root worktrees branches selection
         root=$(git worktree list | head -1 | awk '{print $1}') &&
