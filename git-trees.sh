@@ -1,16 +1,13 @@
 #!/bin/bash
 
 printHelp() {
-    echo "git worktree helper
+    echo "fzf powered git worktree helper
 
-Usage:
-    switch
-    add (-c | -C)
-    remove (-d | -D)
+usage: git-tree (switch)               Switches directory
+   or: git-tree add (-c | -C)          Creates a new git worktree
+   or: git-tree remove (-d | -D)       Removes a git worktree
     "
 }
-
-# TODO: find out how to add autocomplete for bash / zsh..
 
 git-tree() {
     if ! which fzf-tmux >/dev/null; then

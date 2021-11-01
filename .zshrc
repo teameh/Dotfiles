@@ -35,7 +35,7 @@ export PATH="${PATH:+${PATH}:}/usr/local/opt/fzf/bin"
 
 # Aliasses
 source $DOTFILES/aliases.sh
-source $DOTFILES/git-trees
+source $DOTFILES/git-trees.sh
 
 export USER_NAME="Tieme"
 export SSH_KEY_PATH=$HOME/.ssh/dsa_id
