@@ -1,12 +1,17 @@
 #!/bin/bash
 
+# Git tree
+#
+# Copyright (c) 2021 Tieme van Veen
+# https://github.com/teameh/Dotfiles
+
 printHelp() {
     echo "fzf powered git worktree helper
 
 usage: git-tree (switch)               Switches directory
    or: git-tree add (-c | -C)          Creates a new git worktree
    or: git-tree remove (-d | -D)       Removes a git worktree
-    "
+"
 }
 
 git-tree() {
