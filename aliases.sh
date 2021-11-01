@@ -72,7 +72,7 @@ alias record-sim="xcrun simctl io booted recordVideo -f --mask=black --codec=h26
 
 alias edit-keybindings="subl ~/Library/KeyBindings/DefaultKeyBinding.dict"
 
-
+alias gt="git-tree"
 
 # Fixing typos
 # eval $(thefuck --alias)

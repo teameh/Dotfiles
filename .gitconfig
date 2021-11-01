@@ -85,7 +85,6 @@
 
 	stashlist = stash list --date=short
 	stashlist-full = "!sh ~/Developer/Repos/Dotfiles/git-stash-list"
-	tree = "!sh ~/Developer/Repos/Dotfiles/git-trees"
 
 	sa = "!sh -c 'git stash apply stash@{$1}' -"
 	sd = "!sh -c 'git stash drop stash@{$1}' -"
