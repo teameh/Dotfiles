@@ -37,7 +37,8 @@ git-tree() {
         allbranches=$(git branch -la --sort=-committerdate --format="%(refname:short)") &&
         branches=$(echo "$allbranches" | sed "s/$remote\///g" | awk '! seen[$0]++') &&
         branch=$(echo "$branches" | fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
-        newPath=$(echo "$root/../$worktrees/$branch") &&
+        directory=$(sed "s/[^a-zA-Z0-9]//g" <<< $(openssl rand -base64 10)) &&
+        newPath=$(echo "$root/../$worktrees/$directory") &&
         git worktree add $newPath $branch &&
         cd $newPath
     elif [ "$1" = "remove" ] || [ "$1" = "-d" ] || [ "$1" = "-D" ]; then

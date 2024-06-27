@@ -1,15 +1,40 @@
 #!/usr/bin/env bash
 
-# Terminal font
-open $HOME/Dropbox/Settings/Fonts/*
+# Brew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+brew tap homebrew/cask-fonts
+
+brew install \
+  n \
+  robotsandpencils/made/xcodes \
+  fzf \
+  font-source-code-pro-for-powerline \
+  sourcery 
+
+brew install --cask \
+  licecap \
+  brave-browser \
+  rectangle \
+  sublime-text \
+  visual-studio-code \
+  kaleidoscope \
+  grandperspective \
+  keepingyouawake \
+  imageoptim \
+  charles \
+  monitorcontrol \
+  keepassxc \
+  1password \
+  spotify \
+  sketch \
+  signal \
+  gpg-suite-no-mail
 
 # Submile
 ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" /usr/local/bin
 cp -r $HOME/Dropbox/Settings/Sublime/Installed\ Packages/ $HOME/Library/Application\ Support/Sublime\ Text\ 3/Installed\ Packages/
 cp -r $HOME/Dropbox/Settings/Sublime/Packages/ $HOME/Library/Application\ Support/Sublime\ Text\ 3/Packages/
-
-# Spectacle
-cp -r $HOME/Dropbox/Settings/Spectacle.json ~/Library/Application\ Support/Spectacle/Shortcuts.json 2> /dev/null
 
 xcode-select --install
 
@@ -25,9 +50,6 @@ ln -s $HOME/Developer/Repos/Dotfiles/.gitignore_global ~/.gitignore_global
 
 # Brew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-brew install node fzf
-brew install --cask LICEcap spectacle
 
 sudo gem install cocoapods
 

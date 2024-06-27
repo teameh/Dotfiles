@@ -9,16 +9,20 @@ alias Repos='cd ~/Developer/Repos'
 alias Study='cd ~/Developer/Study'
 
 # Edit Dotfiles
-alias Dotfiles="subl ~/Developer/Repos/Dotfiles/"
+alias Dotfiles="code ~/Developer/Repos/Dotfiles/"
+
+alias stale-branches='for k in $(git branch -r | egrep "(quartz|tieme)" | sed /\*/d); do if [[ ! $(git log -1 --since=30.days.ago -s $k) ]]; then echo $k; fi; done'
 
 # Delete all 'gone' 'merged' branches
-alias git-cleanup-branches="git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d"
+alias git-cleanup-branches="git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D"
 
 ## Cleanup XCODE
-alias purgexcodebuilds='rm -rf ~/library/Developer/Xcode/DerivedData'
+alias purgexcodebuilds='rm -rf ~/library/Developer/Xcode/DerivedData && rm -rf ./DerivedData'
+alias project='find . -maxdepth 1 | grep xcodeproj | xargs open'
 
 ## OSX
 alias delete-extended-attributes='xattr -c'
+alias imagediff='ksdiff'
 
 # show path when ls
 alias ls="pwd; ls -ahl"
@@ -60,6 +64,7 @@ alias reload="exec $SHELL -l"
 
 # typos
 alias gut=git
+alias gti=git
 
 alias deleteDsStore="find . -name '.DS_Store' -type f -delete"
 

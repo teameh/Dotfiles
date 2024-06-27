@@ -132,3 +132,10 @@
 	cmd = commands
 	pushf = push --force-with-lease
 	reset-origin = !git fetch && git reset origin/`git rev-parse --abbrev-ref HEAD` --hard
+	rebase-origin = !git fetch && git rebase origin/`git rev-parse --abbrev-ref HEAD` -i
+
+[fetch]
+	showForcedUpdates = true
+	prune = true
+[commit]
+	verbose = true
